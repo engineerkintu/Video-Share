@@ -1,0 +1,33 @@
+{% extends 'layouts.html' %}
+{% block body %}
+
+<h3> Welcome!!! {{ session.username }} !!!</h3></br>
+<div class="col-sm-9">
+	<h3>My movies</h3>
+	<a href="/add_recipe" class="btn btn-success pull-right"> Add Movies</a></br>
+	<hr>
+	<table class="table table-striped table-bordered">
+		{%if all_movies%}
+		<tr>
+			<th>ID</th>
+			<th>Title</th>
+			<th>Author</th>
+			<th></th>
+			<th></th>
+		</tr>
+		{%endif%}
+		{% for movie in all_movies %}
+			{%if movie%}
+				<tr>
+					<td>{{ movie.id | truncate(20) }}</td>
+					<td> <iframe src="{{movie.link}}" frameborder="0"></iframe></td>
+					<td>{{ movie.title | truncate(20) }}</td>
+					<td>{{ movie.details }}</td>
+					<td>{{ movie.created_by}}</td>
+				</tr>
+			{%endif%}
+		{%endfor%}
+	</table>
+</div>
+
+{% endblock %}
