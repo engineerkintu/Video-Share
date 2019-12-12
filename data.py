@@ -1,11 +1,17 @@
 """Data handling """
+from users import users
+from votes import votes
+from movies import movies
+
+all_users = users()
+all_votes = votes()
+all_movies = movies()
 class Movie:
 	"""Movie class"""
-	__movie = []
 
 	def __init__(self):
 		"""initialise class """
-		self.__movie = self.__movie
+		self.__movie = all_movies
 
 	def set_movie(self,movie):
 		"""Set the movie variables"""
@@ -31,16 +37,15 @@ class Movie:
 		"""Get movie """
 		for movie in self.__movie:
 			if movie['movieID'] == movieID:
-				retrun movie
+				return movie
 	
 
 class User:
 	""" User class """
-	__users = []
-
+	
 	def __init__(self):
 		"""initialise class """
-		self.users = self.__users
+		self.__users = all_users
 
 	def register_user(self, user):
 		""" Set user """
@@ -51,36 +56,39 @@ class User:
 		"""Check if username exists """
 		usernames = []
 		for user in self.__users:
-			if user['username'] == username:
+			if user('username') == username:
 				usernames.append(user)
+		
 		return usernames
 
 	def check_user_email(self, email):
 		"""Check if email exists """
 		useremails = []
 		for user in self.__users:
-			if user['email'] == email
+			if user('email') == email:
+				useremails.append(user)
+		
 		return useremails
 
 	def login_user(self, username, password):
 		""" Login user """
+		
 		passed_user = []
-		for user in self.__users:
-			if user['username'] == username and user['password'] == password:
+		for user in self__users:
+			if user('username') == usernane and user('password') == password:
 				passed_user.append(user)
-		retrun passed_user
+		return passed_user
 
 class Upvote:
 	""" Vote class """
-	__up_votes = []
 	def __init__(self):
 		"""Initialise Upvote class """
-		self.__up_votes = self.__up_votes
+		self.__up_votes = all_votes
 	
 	def set_upvote(self,new_vote):
 		""" Set Upvote """
 		self.__up_votes.append(new_vote)
-		return "Movie upvoted successfully'
+		return 'Movie upvoted successfully'
 
 	def check_upvote(self, user, movie_id):
 		""" Check if user has already upvoted """
