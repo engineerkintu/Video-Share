@@ -4,8 +4,10 @@ from functools import wraps
 import uuid
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from wtforms import Form, StringField, BooleanField, TextAreaField, SelectField, PasswordField, validators
-from recipes import movies
-from data import Movie, User, UpVote
+from movies import movies
+from users import users
+from votes import votes
+from data import Movie, User, Upvote
 
 
 app = Flask(__name__)
@@ -13,7 +15,7 @@ app = Flask(__name__)
 all_movies = movies()
 new_movie = Movie()
 user = User()
-upVote = UpVote()
+upVote = Upvote()
 #All Movies
 @app.route('/')
 def movies():
@@ -48,7 +50,7 @@ class MovieForm(Form):
     """Movie form for adding movies"""
     title = StringField(u'Title', validators=[validators.Length(min=1, max=200)])
     description = StringField(u'Description', validators=[validators.Length(min=1, max=500)])
-    link = StrinField(u'Youtube URL', validators=[validators.Length(min=1, max=40)])
+    link = StringField(u'Youtube URL', validators=[validators.Length(min=1, max=40)])
 
 
 #user register
@@ -67,7 +69,7 @@ def register():
         if user.check_user_email(email):
             flash('Email already exists', 'danger')
             return redirect(url_for('register'))
-        user_data = {'id':str(uuid.uuid4()),'email':email,'username':username,'password':password}
+        user_data = {'id':str(uuid.uuid4()),'username':username,'email':email,'password':password}
         response = user.register_user(user_data)
         #flash message
         flash(response, 'success')
@@ -152,6 +154,7 @@ def add_movie():
             return redirect(url_for('add_movie'))
             
         movie_data = {'id':str(uuid.uuid4()),'title':title,'details':details,'link':link,'created_by':created_by,'votes':0}
+	
         response = new_movie.set_movie(movie_data)
         flash(response, 'success')
 
@@ -165,7 +168,8 @@ def add_movie():
 @is_logged_in
 def up_vote(id):
     """Up_vote function for upvoting movies"""
-    upvote_data = {'id':str(uuid.uuid4()),'movie_id':id,'voted_by':session['username']}
+	upvote_data = {'id':str(uuid.uuid4()),'movie_id':id,'voted_by':session['username']}
+
     if upVote.check_upvote(session['username'], id):
         #flash message
         flash('You already upvoted this movie', 'success')
@@ -175,7 +179,7 @@ def up_vote(id):
     flash(response, 'success')
     return redirect(url_for('movie', id=id))
 
-app.secret_key = '\xfd{H\xe5<\x95\xf9\xe3\x96.5\xd1\x01O<!\xd5\xa2\xa0\x9fR"\xa1\xa8'
+
 if __name__ == '__main__':
     app.run(debug=True)
     app.run()
