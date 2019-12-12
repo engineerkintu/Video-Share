@@ -1,0 +1,22 @@
+{%extends 'layouts.html'%}
+
+{%block body%}
+<h1>Movies</h1>
+
+{% for movie in all_movies%}
+<div class="jumbotron">
+    <h3>{{movie.title}}</h3>
+    <p> <iframe src="{{movie.link}}" frameborder="0"></iframe></p>
+    <em>Added by: <span class="fa fa-user"></span> {{movie.created_by}}
+    </em>
+    <h4>Details:</h4>
+        {{movie.details}}
+    <hr>
+
+
+    </div>
+{%endfor%}
+
+
+{%endblock%}
+
