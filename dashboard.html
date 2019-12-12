@@ -1,0 +1,28 @@
+{% extends 'layouts.html' %}
+{% block body %}
+
+<h3> Welcome!!! {{ session.username }} !!!</h3></br>
+<div class="col-sm-9">
+	<h3>My movies</h3>
+	<a href="/add_movie" class="btn btn-success pull-right"> Add Movies</a></br>
+	<hr>
+	{% for movie in all_movies%}
+    <div class="jumbotron">
+        <h3>{{movie.title}}</h3>
+         <p> <iframe src="{{movie.link}}" frameborder="0"></iframe></p>
+        <em>Added by: <span class="fa fa-user"></span> {{movie.created_by}}
+        </em>
+        <p>Details:</p>
+        {{movie.details}}
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-xs"><span class="fa fa-thumbs-o-up"></span> Upvotes:{{movie.votes}}</button>
+        </div>
+
+    </div>
+{%endfor%}
+
+</div>
+
+{% endblock %}
+
