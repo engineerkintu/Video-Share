@@ -4,16 +4,37 @@ def votes():
 			'id':'1',
 			'movie_id':'2',
 			'voted_by':'moze',
+			'vote_type':'up_vote',
 		},
 		{
 			'id':'2',
 			'movie_id':'2',
 			'voted_by':'daphy',
+			'vote_type':'up_vote',
 		},
 		{
 			'id':'3',
 			'movie_id':'3',
 			'voted_by':'rosy',
+			'vote_type':'up_vote'
+		},
+		{
+			'id':'1',
+			'movie_id':'2',
+			'voted_by':'rosy',
+			'vote_type':'down_vote',
+		},
+		{
+			'id':'2',
+			'movie_id':'2',
+			'voted_by':'willy',
+			'vote_type':'down_vote',
+		},
+		{
+			'id':'3',
+			'movie_id':'3',
+			'voted_by':'daphy',
+			'vote_type':'down_vote'
 		},
 	]
 	return votes
