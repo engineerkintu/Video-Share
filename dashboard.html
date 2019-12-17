@@ -1,25 +1,45 @@
 {% extends 'layouts.html' %}
 {% block body %}
 
-<h3> Welcome!!! {{ session.username }} !!!</h3></br>
+
 <div class="col-sm-9">
-	<h3>My movies</h3>
-	<a href="/add_movie" class="btn btn-success pull-right"> Add Movies</a></br>
+
+    <h4> Welcome! {{ session.username }} </h4>
+
+	<a href="/add_movie" class="btn btn-success pull-right"> Share a movie</a></br>
 	<hr>
-	{% for movie in all_movies%}
-    <div class="jumbotron">
-        <h3>{{movie.title}}</h3>
-         <p> <iframe src="{{movie.link}}" frameborder="0"></iframe></p>
-        <em>Added by: <span class="fa fa-user"></span> {{movie.created_by}}
-        </em>
-        <p>Details:</p>
-        {{movie.details}}
+	{% for movie in new_movies%}
+	<div class ="container">
+	    <div class="row">
+	        <div class="col-sm-2"></div>
+	        <div class="col-sm-4">
+                <p> <iframe src="{{movie.link}}" frameborder="0"></iframe></p>
+	        </div>
+	        <div class="col-sm-4">
 
-        <div class="btn-group">
-            <button type="button" class="btn btn-default btn-xs"><span class="fa fa-thumbs-o-up"></span> Upvotes:{{movie.votes}}</button>
-        </div>
+                    <h3  style="color:red;">{{movie.title}}</h3>
+                    <em>Shared by: <span class="fa fa-user"></span> {{movie.created_by}}</em>
+			{%if new_votes.check_vote() == true%}
+				{%if new_votes.check_voteType(v, movie.id) == true%}
+					 <i class="fa fa-thumbs-up fa-5x"></i>(voted-up)
+				else:
+					 <i class="fa fa-thumbs-down fa-5x"></i>(voted-down)
+				{%endif%}
+			{%else%}
+				 <a href="{{url_for('up_vote',movie_id=movie.get('id'),user_name=session.username)}}"><i class="fa fa-thumbs-up fa-5x"></i></a>
+                            <a href="{{url_for('down_vote',movie_id=movie.get('id'),user_name=session.username)}}"><i class="fa fa-thumbs-down fa-5x"></i></a>(un-voted)
+			{%endif%}
+				
+                     </br>
 
-    </div>
+                     {{new_votes.get_upVotes}}&nbsp;<i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;{{new_votes.get_downVotes}}&nbsp;<i class="fa fa-thumbs-down"></i>
+                    <h4>Description:</h4><p>{{movie.details}}</p>
+
+	        </div>
+	        <div class="col-sm-2"></div>
+	    </div>
+	</div>
+
 {%endfor%}
 
 </div>
