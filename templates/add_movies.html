@@ -1,20 +1,32 @@
 {%extends 'layouts.html'%}
 
 {%block body%}
-<div class="jumbotron">
-	<h2>Share a Youtube movie</h2>
-	{% from "includes/_formhelpers.html" import render_field %}
-	<form method="POST" action="">
-		<div class="form-group">
-			{{render_field(form.title, class_="form-control")}}
-		</div>
-		<div class="form-group">
-			{{render_field(form.link, class_="form-control")}}
-		</div>
-		<div class="form-group">
-			{{render_field(form.details, class_="form-control")}}
-		</div>
-		<p><input type="Submit" class="btn btn-primary" value="Submit"></p>
-	</form>
-</div>
+<h1>Movies</h1>
+
+	{% for movie in new_movies%}
+	<div class ="container">
+	    <div class="row">
+	        <div class="col-sm-2"></div>
+	        <div class="col-sm-4">
+                <p> <iframe src="{{movie.link}}" frameborder="0"></iframe></p>
+	        </div>
+	        <div class="col-sm-4">
+
+                    <h3  style="color:red;">{{movie.title}}</h3>
+                    <em>Shared by: <span class="fa fa-user"></span> {{movie.created_by}}</em>
+                    <h4>Description:</h4><p>{{movie.details}}</p>
+                     {{movie.up_vote}}&nbsp;<i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;{{movie.down_vote}}&nbsp;<i class="fa fa-thumbs-down"></i>
+
+
+	        </div>
+	        <div class="col-sm-2"></div>
+	    </div>
+	</div>
+
+{%endfor%}
+
+
+
+
 {%endblock%}
+
