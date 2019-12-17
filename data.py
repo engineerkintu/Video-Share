@@ -3,15 +3,14 @@ from users import users
 from votes import votes
 from movies import movies
 
-all_users = users()
-all_votes = votes()
-all_movies = movies()
+
 class Movie:
 	"""Movie class"""
+	__movie = []
 
 	def __init__(self):
 		"""initialise class """
-		self.__movie = all_movies
+		self.__movie = self.__movie
 
 	def set_movie(self,movie):
 		"""Set the movie variables"""
@@ -25,27 +24,12 @@ class Movie:
 			public_movies.append(movie)
 		return public_movies
 
-	def get_user_movies(self, user):
-		""" Get movies """
-		user_movies = []
-		for movie in self.__movie:
-			if movie['added_by'] == user:
-				user_movies.append(movie)
-		return user_movies
-
-	def get_movie(self, movieID):
-		"""Get movie """
-		for movie in self.__movie:
-			if movie['movieID'] == movieID:
-				return movie
-	
-
 class User:
 	""" User class """
-	
+	__users = []
 	def __init__(self):
 		"""initialise class """
-		self.__users = all_users
+		self.__users = self.__users
 
 	def register_user(self, user):
 		""" Set user """
@@ -56,7 +40,7 @@ class User:
 		"""Check if username exists """
 		usernames = []
 		for user in self.__users:
-			if user('username') == username:
+			if user['username'] == username:
 				usernames.append(user)
 		
 		return usernames
@@ -65,7 +49,7 @@ class User:
 		"""Check if email exists """
 		useremails = []
 		for user in self.__users:
-			if user('email') == email:
+			if user['email'] == email:
 				useremails.append(user)
 		
 		return useremails
@@ -75,36 +59,54 @@ class User:
 		
 		passed_user = []
 		for user in self__users:
-			if user('username') == usernane and user('password') == password:
+			if user['username'] == usernane and user['password'] == password:
 				passed_user.append(user)
 		return passed_user
 
-class Upvote:
+class Vote:
 	""" Vote class """
+	__votes =[]
 	def __init__(self):
-		"""Initialise Upvote class """
-		self.__up_votes = all_votes
+		"""Initialise Vote class """
+		self.__votes = self.__votes
 	
-	def set_upvote(self,new_vote):
-		""" Set Upvote """
-		self.__up_votes.append(new_vote)
-		return 'Movie upvoted successfully'
+	def set_vote(self,new_vote):
+		""" Set Vote """
+		self.__votes.append(new_vote)
+		return 'Movie voted successfully'
 
-	def check_upvote(self, user, movie_id):
+	def check_vote(self, user, movie_id):
 		""" Check if user has already upvoted """
-		my_vote = []
-		for up_vote in self.__up_votes:
-			if up_vote['voted_by'] == user and up_vote['movie_id'] == movie_id:
-				my_vote.append(up_vote)
+		my_vote = False
+		for vote in self.__votes:
+			if vote['voted_by'] == user and vote['movie_id'] == movie_id:
+				my_vote = True
 		return my_vote
 
 	def get_upVotes(self, movie_id):
-		""" get Upvoes """
-		votes = 0
-		for up_vote in self.__up_votes:
-			if up_vote['movie_id'] == movie_id:
-				votes += 1
-		return votes
+		""" get up votes """
+		vts = 0
+		for vote in self.__votes:
+			if vote['movie_id'] == movie_id and vote['vote_type'] == "up_vote":
+				vts += 1
+		return vts
+
+	def get_downVotes(self, movie_id):
+		""" get down votes """
+		vts = 0
+		for vote in self.__votes:
+			if vote['movie_id'] == movie_id and vote['vote_type'] == "down_vote":
+				vts += 1
+		return vts
+
+	def check_voteType(self, user, movie_id):
+		""" check whether a user voted up or down for a movies"""
+		up_vote = False
+		for vote in self.__votes:
+			if vote['movie_id'] == movie_id and vote['vote_type'] == "up_vote":
+				up_vote = True
+		return up_vote
+				
 		
 
 	
