@@ -3,7 +3,7 @@
 {%block body%}
 <h1>Movies</h1>
 
-	{% for movie in all_movies%}
+	{% for movie in new_movies.get_movies()%}
 	<div class ="container">
 	    <div class="row">
 	        <div class="col-sm-2"></div>
@@ -15,7 +15,7 @@
                     <h3  style="color:red;">{{movie.title}}</h3>
                     <em>Shared by: <span class="fa fa-user"></span> {{movie.created_by}}</em>
                     <h4>Description:</h4><p>{{movie.details}}</p>
-                     {{new_votes.getupVote()}}&nbsp;<i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;{{new_votes.getdownVote}}&nbsp;<i class="fa fa-thumbs-down"></i>
+                     {{new_votes.get_upVotes(movie.id)}}&nbsp;<i class="fa fa-thumbs-up"></i>&nbsp;&nbsp;{{new_votes.get_downVotes(movie.id)}}&nbsp;<i class="fa fa-thumbs-down"></i>
 
 
 	        </div>
