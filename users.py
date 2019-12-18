@@ -16,7 +16,7 @@ def users():
 			'password':'222',
 		},
 		{	'id':'4',
-			'userrname':'daphy',
+			'username':'daphy',
 			'email':'daphy@yahoo.com',
 			'password':'bbb',
 		},
