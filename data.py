@@ -1,7 +1,5 @@
 """Data handling """
-from users import users
-from votes import votes
-from movies import movies
+
 
 
 class Movie:
@@ -58,8 +56,8 @@ class User:
 		""" Login user """
 		
 		passed_user = []
-		for user in self__users:
-			if user['username'] == usernane and user['password'] == password:
+		for user in self.__users:
+			if user['username'] == username and user['password'] == password:
 				passed_user.append(user)
 		return passed_user
 
