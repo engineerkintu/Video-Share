@@ -7,7 +7,7 @@ from wtforms import Form, StringField, BooleanField, TextAreaField, SelectField,
 from movies import movies
 from users import users
 from votes import votes
-from data import Movie, User, Upvote
+from data import Movie, User, Vote
 
 
 app = Flask(__name__)
@@ -39,9 +39,8 @@ for user in all_users:
 @app.route('/')
 def movies():
     	"""Display all movies for public users """
-
-    	new_movies=new_movie.get_movies()
-    	for movie in new_movies:
+	all_movies = new_movies.get_movies()
+    	for movie in all_movies:
 	
         	up_votes = new_votes.get_upVotes(movie['id'])
 		movie['up_votes'] = up_votes
@@ -72,7 +71,7 @@ class RegisterForm(Form):
 class MovieForm(Form):
     	"""Movie form for adding movies"""
     	title = StringField(u'Title', validators=[validators.Length(min=1, max=200)])
-    	description = StringField(u'Description', validators=[validators.Length(min=1, max=500)])
+    	details = StringField(u'Description', validators=[validators.Length(min=1, max=500)])
     	link = StringField(u'Youtube URL', validators=[validators.Length(min=1, max=40)])
 
 
@@ -93,7 +92,7 @@ def register():
             		flash('Email already exists', 'danger')
             		return redirect(url_for('register'))
         	user_data = {'id':str(uuid.uuid()),'username':username,'email':email,'password':password}
-        	response = new_user.register_user(user_data)
+        	response = new_users.register_user(user_data)
 
         	#flash message
         	flash(response, 'success')
@@ -147,7 +146,8 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-	for movie in new_movies:
+	all_movies = new_movies.get_movies()
+	for movie in all_movies:
 	
         	up_votes = new_votes.get_upVotes(movie['id'])
 		movie['up_votes'] = up_votes
@@ -155,7 +155,7 @@ def dashboard():
         	movie['down_votes'] = down_votes
 		
        
-    	if new_movies:
+    	if all_movies:
         	return render_template('dashboard.html', new_movies=new_movies, new_users=new_users,new_votes=new_votes)
     	else:
         	msg = 'No Movie Found'
@@ -170,7 +170,7 @@ def add_movie():
     if request.method == 'POST' and form.validate():
         movie_data = {}
         title = form.title.data
-        description = form.description.data
+        details = form.details.data
 	link = form.link.data
         if session['username']:
             created_by = session['username']
@@ -183,45 +183,45 @@ def add_movie():
             
         movie_data = {'id':str(uuid.uuid4()),'title':title,'details':details,'link':link,'created_by':created_by,'votes':0}
 	
-        response = new_movie.set_movie(movie_data)
+        response = new_movies.set_movie(movie_data)
         flash(response, 'success')
 
         return redirect(url_for('dashboard'))
 
-    return render_template('add_movie.html', form=form)
+    return render_template('add_movies.html', form=form)
 
 
 #upVote Movie
-@app.route('/upVote/<string:id>', methods=['POST'])
+@app.route('/upVote/<string:movie_id>/<string:user_name>/', methods=['POST','GET'])
 @is_logged_in
-def upVote(movie_id):
+def upVote(movie_id,user_name):
     """vote function for voting movies"""
-	upVote_data = {'id':str(uuid.uuid4()),'movie_id':movie_id,'voted_by':session['username'],'vote_type':'up_vote'}
+	upVote_data = {'id':str(uuid.uuid4()),'movie_id':movie_id,'voted_by':user_name,'vote_type':'up_vote'}
 
-    if new_vote.check_vote(session['username'], movie_id):
+    if new_votes.check_vote(user_name, movie_id):
         #flash message
         flash('You already upvoted this movie', 'success')
         #redirect to review page
-        return redirect(url_for('dashboard', id=id))
+        return redirect(url_for('dashboard'))
     response = new_votes.set_vote(upVote_data)
     flash(response, 'success')
-    return redirect(url_for('dashboard', id=id))
+    return redirect(url_for('dashboard'))
 
 #downVote Movie
-@app.route('/downVote/<string:id>', methods=['POST'])
+@app.route('/downVote/<string:movie_id>/<string:user_name>/', methods=['POST','GET'])
 @is_logged_in
-def downVote(movie_id):
+def downVote(movie_id,user_name):
     """vote function for voting movies"""
-	downVote_data = {'id':str(uuid.uuid4()),'movie_id':movie_id,'voted_by':session['username'],'vote_type':'down_vote'}
+	downVote_data = {'id':str(uuid.uuid4()),'movie_id':movie_id,'voted_by':user_name,'vote_type':'down_vote'}
 
-    if new_vote.check_vote(session['username'], movie_id):
+    if new_votes.check_vote(user_name, movie_id):
         #flash message
         flash('You already upvoted this movie', 'success')
         #redirect to review page
-        return redirect(url_for('dashboard', id=id))
+        return redirect(url_for('dashboard'))
     response = new_votes.set_vote(downVote_data)
     flash(response, 'success')
-    return redirect(url_for('dashboard', id=id))
+    return redirect(url_for('dashboard'))
 
 
 if __name__ == '__main__':
